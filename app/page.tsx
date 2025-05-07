@@ -116,28 +116,6 @@ export default function Home() {
                   How It Works
                 </Link>
               </div>
-
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-3">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div
-                      key={i}
-                      className="h-10 w-10 rounded-full border-2 border-black bg-gray-200 overflow-hidden shadow-retro"
-                    >
-                      <Image
-                        src={`https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=600`}
-                        alt="User avatar"
-                        width={40}
-                        height={40}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="border-2 border-black rounded-full px-4 py-1 bg-white shadow-retro">
-                  <span className="font-bold">10,000+ happy travelers ⭐⭐⭐⭐⭐</span>
-                </div>
-              </div>
             </div>
 
             <div className="relative">

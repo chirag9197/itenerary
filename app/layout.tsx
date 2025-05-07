@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "AI Odyssey Planner - Retro Travel Planning",
+  title: "AI Trip Planner - Retro Travel Planning",
   description: "Plan your perfect trip in minutes, not hours with our AI-powered travel assistant.",
     generator: 'v0.dev'
 }
