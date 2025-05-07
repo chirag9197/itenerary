@@ -34,24 +34,6 @@ export default function Home() {
               <span className="text-2xl font-black tracking-tight">Voyagent</span>
             </div>
 
-            <div className="hidden md:flex items-center space-x-8">
-              <Link href="#features" className="font-bold hover:underline">
-                Features
-              </Link>
-              <Link href="#how-it-works" className="font-bold hover:underline">
-                How It Works
-              </Link>
-              <Link href="#pricing" className="font-bold hover:underline">
-                Pricing
-              </Link>
-              <Link href="#testimonials" className="font-bold hover:underline">
-                Testimonials
-              </Link>
-              <Link href="#faq" className="font-bold hover:underline">
-                FAQ
-              </Link>
-            </div>
-
             <MobileNav />
           </nav>
         </header>
@@ -108,13 +90,6 @@ export default function Home() {
                 >
                   Start Planning Now <span className="ml-2">→</span>
                 </button>
-
-                <Link
-                  href="#how-it-works"
-                  className="rounded-md border-2 border-black bg-yellow-400 px-6 py-3 font-bold shadow-retro hover:translate-y-0.5 hover:shadow-sm transition-all"
-                >
-                  How It Works
-                </Link>
               </div>
             </div>
 

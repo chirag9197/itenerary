@@ -214,7 +214,6 @@ export function TravelPlannerForm() {
                     <SelectItem value="any">Any</SelectItem>
                     <SelectItem value="vegetarian">Vegetarian</SelectItem>
                     <SelectItem value="non-vegetarian">Non-Vegetarian</SelectItem>
-                    <SelectItem value="vegan">Vegan</SelectItem>
                     <SelectItem value="local">Local Cuisine</SelectItem>
                   </SelectContent>
                 </Select>
