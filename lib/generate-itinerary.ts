@@ -1,5 +1,6 @@
 import { generateText } from "ai"
 import { createGroq } from "@ai-sdk/groq"
+import { getDestinationItinerary } from "./destination-itineraries"
 
 interface TravelFormData {
   destination: string
@@ -15,7 +16,8 @@ interface TravelFormData {
 
 export async function generateItinerary(formData: TravelFormData) {
   // Check if GROQ_API_KEY is available
-  if (!process.env.GROQ_API_KEY) {
+  const apiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY || process.env.GROQ_API_KEY
+  if (!apiKey) {
     throw new Error("GROQ_API_KEY is missing. Please add it to your environment variables.")
   }
 
@@ -25,7 +27,7 @@ export async function generateItinerary(formData: TravelFormData) {
       : 3 // Default to 3 days if no dates provided
 
   const prompt = `
-    Create a detailed ${numDays}-day travel itinerary for ${formData.destination} in India for ${formData.numPeople} people.
+    You are an expert Indian travel planner. Create a detailed ${numDays}-day travel itinerary for ${formData.destination} in India for ${formData.numPeople} people.
     
     Details:
     - Budget: ₹${formData.budget} (total for the trip)
@@ -35,18 +37,7 @@ export async function generateItinerary(formData: TravelFormData) {
     - Interests: ${formData.interests.join(", ")}
     ${formData.startDate ? `- Travel dates: ${formData.startDate.toLocaleDateString()} to ${formData.endDate?.toLocaleDateString()}` : ""}
     
-    Please provide a structured itinerary with the following:
-    1. A brief overview of the destination
-    2. Day-by-day breakdown with:
-       - Morning activities with specific locations and approximate costs
-       - Afternoon activities with specific locations and approximate costs
-       - Evening activities with specific locations and approximate costs
-       - Recommended meals (breakfast, lunch, dinner) with restaurant names and price ranges
-       - Detailed accommodation suggestions with names, locations, and price ranges
-       - Practical tips for the day
-    3. General travel tips for the destination
-    
-    Format the response as a JSON object with this structure:
+    IMPORTANT: You must respond with ONLY a valid JSON object in the following format, with no additional text or explanation:
     {
       "destination": "Destination Name",
       "overview": "Brief overview of the destination",
@@ -77,7 +68,6 @@ export async function generateItinerary(formData: TravelFormData) {
           "accommodation": "Detailed accommodation suggestion with name, location, and price range",
           "tips": ["Tip 1", "Tip 2"]
         }
-        // Repeat for each day
       ],
       "tips": ["General tip 1", "General tip 2", "General tip 3"]
     }
@@ -88,22 +78,38 @@ export async function generateItinerary(formData: TravelFormData) {
   try {
     // Create a custom Groq provider instance with the API key from environment variables
     const customGroq = createGroq({
-      apiKey: process.env.GROQ_API_KEY,
+      apiKey: apiKey,
     })
 
     const { text } = await generateText({
       model: customGroq("llama3-70b-8192"),
       prompt,
       system:
-        "You are an expert Indian travel planner with deep knowledge of destinations, accommodations, food, and activities across India. Provide detailed, authentic, and budget-conscious recommendations. Include specific names of places, restaurants, and accommodations with realistic price ranges.",
+        "You are an expert Indian travel planner. You must respond with ONLY a valid JSON object, with no additional text or explanation. The response must be parseable by JSON.parse().",
       temperature: 0.7,
       maxTokens: 4000,
     })
 
-    // Parse the JSON response
-    return JSON.parse(text)
+    try {
+      // Try to parse the response as JSON
+      const parsedResponse = JSON.parse(text)
+      
+      // Validate the response structure
+      if (!parsedResponse.destination || !parsedResponse.days || !Array.isArray(parsedResponse.days)) {
+        throw new Error("Invalid response structure")
+      }
+
+      return parsedResponse
+    } catch (parseError) {
+      console.error("Error parsing AI response:", parseError)
+      console.error("Raw response:", text)
+      
+      // If parsing fails, return a fallback itinerary
+      return getDestinationItinerary(formData.destination)
+    }
   } catch (error) {
     console.error("Error generating itinerary:", error)
-    throw new Error("Failed to generate itinerary. Please try again.")
+    // Return a fallback itinerary if the AI generation fails
+    return getDestinationItinerary(formData.destination)
   }
 }
