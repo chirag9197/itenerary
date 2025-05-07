@@ -125,7 +125,7 @@ export default function Home() {
                       className="h-10 w-10 rounded-full border-2 border-black bg-gray-200 overflow-hidden shadow-retro"
                     >
                       <Image
-                        src={`/placeholder.svg?height=40&width=40&text=👤`}
+                        src={`https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=600`}
                         alt="User avatar"
                         width={40}
                         height={40}
@@ -145,7 +145,7 @@ export default function Home() {
               <div className="relative z-10 border-4 border-black rounded-lg bg-white p-3 shadow-retro rotate-1">
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md border-2 border-black">
                   <Image
-                    src="/placeholder.svg?height=400&width=600&text=Mountain+Landscape"
+                    src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=600"
                     alt="Travel destination"
                     width={600}
                     height={400}
